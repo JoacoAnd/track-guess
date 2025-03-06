@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Album } from "@/types";
 import { Input } from "@/components/ui/input";
@@ -37,7 +37,7 @@ export default function Game() {
     };
 
     fetchAlbumsAndSongs();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [artist]);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function Game() {
     if (userInput.trim() !== "" && !gameOver) {
       checkAnswer(userInput);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInput]);
 
   const checkAnswer = (input: string) => {
@@ -128,52 +128,54 @@ export default function Game() {
   }
 
   return (
-    <main className="w-full min-h-screen bg-[#191A1C]">
-      <div className="mx-auto flex flex-col justify-start w-full text-white px-[5%] py-8 gap-8 max-w-7xl">
-        <div className="gap-[5%] flex items-end">
-          <Input
-            type="text"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            className="text-white"
-            placeholder="Ingresa una canción..."
-            disabled={loading || gameOver}
-          />
-          <div className="flex flex-col items-center">
-            <span className="font-light text-xs">PUNTAJE</span>
-            <p className="font-bold text-2xl">
-              {correctAnswers}/{totalSongs}
-            </p>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="font-light text-xs">TIEMPO</span>
-            <p className="font-bold text-2xl">
-              {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:
-              {String(timeLeft % 60).padStart(2, "0")}
-            </p>
-          </div>
-        </div>
-
-        <div className="w-full gap-x-4 gap-y-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {albums.map((album) => (
-            <div key={album.id} className="w-full">
-              <img
-                src={album.image}
-                alt={album.name}
-                className="w-full h-auto aspect-square object-cover mb-4"
-              />
-              <ul className="space-y-2">
-                {album.songs.map((cancion, index) => (
-                  <li key={index} className="text-base truncate">
-                    {index + 1}.{" "}
-                    {correctSongs[album.id]?.includes(cancion) && cancion}
-                  </li>
-                ))}
-              </ul>
+    <Suspense>
+      <main className="w-full min-h-screen bg-[#191A1C]">
+        <div className="mx-auto flex flex-col justify-start w-full text-white px-[5%] py-8 gap-8 max-w-7xl">
+          <div className="gap-[5%] flex items-end">
+            <Input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              className="text-white"
+              placeholder="Ingresa una canción..."
+              disabled={loading || gameOver}
+            />
+            <div className="flex flex-col items-center">
+              <span className="font-light text-xs">PUNTAJE</span>
+              <p className="font-bold text-2xl">
+                {correctAnswers}/{totalSongs}
+              </p>
             </div>
-          ))}
+            <div className="flex flex-col items-center">
+              <span className="font-light text-xs">TIEMPO</span>
+              <p className="font-bold text-2xl">
+                {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:
+                {String(timeLeft % 60).padStart(2, "0")}
+              </p>
+            </div>
+          </div>
+
+          <div className="w-full gap-x-4 gap-y-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {albums.map((album) => (
+              <div key={album.id} className="w-full">
+                <img
+                  src={album.image}
+                  alt={album.name}
+                  className="w-full h-auto aspect-square object-cover mb-4"
+                />
+                <ul className="space-y-2">
+                  {album.songs.map((cancion, index) => (
+                    <li key={index} className="text-base truncate">
+                      {index + 1}.{" "}
+                      {correctSongs[album.id]?.includes(cancion) && cancion}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </Suspense>
   );
 }

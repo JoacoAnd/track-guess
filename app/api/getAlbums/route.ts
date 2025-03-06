@@ -35,6 +35,7 @@ export async function GET(req: Request) {
       id: album.id,
       name: album.name,
       image: album.images[0]?.url || "",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       songs: tracksData.items.map((t: any) => t.name),
     });
   }

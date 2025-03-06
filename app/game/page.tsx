@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -36,6 +37,7 @@ export default function Game() {
     };
 
     fetchAlbumsAndSongs();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [artist]);
 
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function Game() {
     if (userInput.trim() !== "" && !gameOver) {
       checkAnswer(userInput);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInput]);
 
   const checkAnswer = (input: string) => {

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { SpotifyArtist } from "@/types";
 import { useRouter } from "next/navigation";
 import React from "react";
